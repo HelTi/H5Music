@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>单列模式</title>
+</head>
+<body>
+<div id="main">
+single
+</div>
+</body>
+<script>
+    var singletonTester=(function () {
+        function Singleton(options) {
+            options=options || {};
+            this.name='single';
+            this.a=options.a || 6;
+            this.b=options.b;
+        }
+
+        var instance;
+        var _static={
+            name:'singletontester',
+            getInstance:function (options) {
+                if(instance===undefined){
+                    instance = new Singleton(options);
+                }
+                return instance;
+            }
+        }
+        return _static;
+    })();
+    window.singleton=singletonTester;
+    var singleA= singletonTester.getInstance({
+        a:5
+    })
+    console.log(singleA.a);
+</script>
+<script>
+    var singleA= singleton.getInstance({
+        a:8
+    })
+    console.log(singleA.a);
+</script>
+</html>

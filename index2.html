@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>my music</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no,minimum-scale=1.0,maximum-scale=1.0">
+    <link href="static/css/font-awesome.min.css" rel="stylesheet">
+    <link href="static/css/index.css" rel="stylesheet">
+</head>
+<body>
+<div id="app">
+    <div class="m-song" id="song-wrap">
+        <div class="m-song-bg" style="background-image: url('./static/img/bg.jpg');opacity:1;">
+        </div>
+        <div class="m-song-wrap m-song-wraptop">
+            <div class="m-song-disc">
+                <div class="m-song-turn">
+                    <div class="m-song-img">
+                        <img class="u-img" src="./static/img/song.jpg" alt="">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="music-p" style="position:absolute;bottom:25%; font-size:12px;padding: 10px;">
+        <p>这个世界上肯定有另一个我，做着我不敢做的事，过着我想过的生活。一个人逛街，一个人吃饭，一个人旅行，一个人做很多事。极致的幸福，存在于孤独的深海。在这样日复一日的生活里，我逐渐和自己达成和解。</p>
+    </div>
+    <div class="play-control">
+        <audio id="music" src="media/蔡健雅 - 红色高跟鞋.mp3" autoplay="autoplay"></audio>
+        <div class="m-control clear_fix">
+            <a href="javascript:void(0)" id="m-pre"><i class="fa fa-step-backward"></i></a>
+            <a href="javascript:void(0)" id="m-play"><i class="fa fa-pause"></i> </a>
+            <a href="javascript:void(0)" id="m-next"><i class="fa fa-step-forward"></i></a>
+        </div>
+        <div class="progress">
+            <div class="progress-bar"></div>
+            <div id="slide_btn"></div>
+        </div>
+        <div class="mtime" id="mtime">
+            <p><span class="autho">红色高跟鞋-蔡雅健</span><span class="m_time_now">00:00</span>/<span class="time_t">00:00</span></p>
+        </div>
+    </div>
+</div>
+</body>
+<script src="static/js/jquery.min.js"></script>
+<script>
+    var datamusic = {
+        status: 'ok',
+        data: [
+            {
+                "name": '红色高跟鞋-蔡雅健',
+                "m_url": "media/蔡健雅 - 红色高跟鞋.mp3"
+            },
+            {
+                "name": 'Staring At My Journey',
+                "m_url": "media/b.mp3"
+            },
+            {
+                "name": '孙燕姿 - 遇见.mp3',
+                "m_url": "media/孙燕姿 - 遇见.mp3"
+            },
+            {
+                "name": 'Nomak - Moon Flow.mp3',
+                "m_url": "media/Nomak - Moon Flow.mp3"
+            }
+        ]
+    }
+    var play_now = 0;
+    var m = document.getElementById("music");
+    m.autoplay = true;
+    $("#m-play").click(function () {
+        toogelePlay();
+    })
+  /*  $("#m-stop").click(function () {
+        m.pause();
+    })*/
+    function toogelePlay() {
+        if(m.paused){
+            m.play();
+            $("#m-play>i").addClass('fa-pause').removeClass('fa-play')
+        }else{
+            m.pause();
+            $("#m-play>i").removeClass('fa-pause').addClass('fa-play')
+        }
+    }
+    /*下一首*/
+    $("#m-pre").click(function () {
+      mPrev();
+    })
+    $("#m-next").click(function () {
+        mNext();
+    })
+    function mPrev() {
+        var len = datamusic.data.length;
+        console.log(len)
+        play_now = (play_now + len - 1) % len;
+        $("#music").attr("src", datamusic.data[play_now].m_url);
+        $(".autho").html(datamusic.data[play_now].name)
+        console.log(datamusic.data[play_now].m_url)
+        getEle("music").play();
+        console.log(play_now)
+    }
+    function mNext() {
+        var len = datamusic.data.length;
+        play_now = (play_now + 1) % len;
+        $("#music").attr("src", datamusic.data[play_now].m_url);
+        $(".autho").html(datamusic.data[play_now].name)
+        console.log(datamusic.data[play_now].m_url)
+        getEle("music").play();
+        console.log(play_now)
+    }
+    //进度条
+    var mc = document.getElementById('mcanvas');
+    var proBarWidth = $('.progress').width();
+    //歌曲时间
+    function playTime(time,timenow) {
+        var $time_now = $(".m_time_now");
+        var $time_t = $(".time_t");
+        //分钟
+        var minute = parseInt(time / 60) < 10 ? "0" + parseInt(time / 60) : parseInt(time / 60);
+        //秒
+        var second = (parseInt(time % 60) < 10) ? "0" + parseInt(time % 60) : parseInt(time % 60);
+        //总时长
+        var alltime = "" + minute + ":" + second;
+        //分钟
+        var n_minute = parseInt(timenow / 60) < 10 ? "0" + parseInt(timenow / 60) : parseInt(timenow / 60);
+        //秒
+        var n_second = (parseInt(timenow % 60) < 10) ? "0" + parseInt(timenow % 60) : parseInt(timenow % 60);
+        //总时长
+        var n_time = "" + n_minute + ":" + n_second;
+        //console.log(alltime)
+        $time_t.html(alltime);
+        $time_now.html(n_time);
+    }
+
+    m.addEventListener('timeupdate', function () {
+        var progressValue = m.currentTime / m.duration;
+        var mtime = Math.floor(m.duration);
+        var mnow=Math.floor(m.currentTime);
+        // console.log('时长：' + mtime)
+        if (!isNaN(m.duration)) {
+
+            if (progressValue == 1) {
+                progressValue = 0;
+            }
+            //canvas
+            //drawCircle(mc,progressValue);
+            var barValue = Math.floor((m.currentTime / m.duration) * proBarWidth);
+            progressbar('.progress-bar', barValue);
+            slideBarProgress("#slide_btn",barValue);
+            playTime(mtime,mnow);
+        }
+    });
+    m.addEventListener('ended',function () {
+        $(".progress-bar").css('width',0);
+        mNext();
+    })
+    function progressbar(ele, percentage) {
+        $(ele).css('width', percentage);
+    }
+    function slideBarProgress(ele,percentage) {
+        $(ele).css('left',percentage);
+    }
+    function getEle(id) {
+        return document.getElementById(id);
+    }
+</script>
+</html>

@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+</head>
+<style type="text/css">
+    .progress {
+        width: 100%;
+        height: 4px;
+        border-radius: 2px;
+        position:relative;
+    }
+    .progress .progress-bar {
+        height: 100%;
+        width: 0;
+        background: #4cae4c;
+        border-radius: 2px;
+    }
+    #slide_btn{
+        position:absolute;
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        left:0;
+        top:-2px;
+        background-color:#204d74;
+    }
+</style>
+<body>
+<div>music</div>
+<div>
+    <audio id="music" src="../media/蔡健雅 - 红色高跟鞋.mp3" controls="controls"></audio>
+    <div class="m-control">
+        <button id="m-play">play</button>
+        <button id="m-stop">stop</button>
+        <button id="m-pre">pre</button>
+        <button id="m-next">next</button>
+    </div>
+    <div class="progress">
+        <div class="progress-bar"></div>
+        <div id="slide_btn"></div>
+    </div>
+    <div class="mtime" id="mtime">
+        <span class="m_time_now">00:00</span>/<span class="time_t">00:00</span>
+    </div>
+</div>
+</body>
+<script src="../static/js/jquery.min.js"></script>
+<script>
+    var datamusic = {
+        status: 'ok',
+        data: [
+            {
+                "name": '红色高跟鞋',
+                "m_url": "../media/蔡健雅 - 红色高跟鞋.mp3"
+            },
+            {
+                "name": 'b',
+                "m_url": "../media/b.mp3"
+            }
+        ]
+    }
+    var play_now = 0;
+    var m = document.getElementById("music");
+    m.autoplay = false;
+    console.log(m);
+
+    $("#m-play").click(function () {
+        m.play();
+    })
+    $("#m-stop").click(function () {
+        m.pause();
+    })
+    $("#m-pre").click(function () {
+        var len = datamusic.data.length;
+        play_now = (play_now + len - 1) % len;
+        $("#music").attr("src", datamusic.data[play_now].m_url);
+        console.log(datamusic.data[play_now].m_url)
+        getEle("music").play();
+        console.log(play_now)
+
+    })
+    $("#m-next").click(function () {
+        play_now = (play_now + 1) % 2;
+        $("#music").attr("src", datamusic.data[play_now].m_url);
+        console.log(datamusic.data[play_now].m_url)
+        getEle("music").play();
+        console.log(play_now)
+    })
+    m.onplay = function () {
+        console.log('...')
+    }
+    //进度条
+    var mc = document.getElementById('mcanvas');
+    var proBarWidth = $('.progress').width();
+    //歌曲时间
+    function playTime(time,timenow) {
+        var $time_now = $(".m_time_now");
+        var $time_t = $(".time_t");
+        //分钟
+        var minute = parseInt(time / 60) < 10 ? "0" + parseInt(time / 60) : parseInt(time / 60);
+        //秒
+        var second = (parseInt(time % 60) < 10) ? "0" + parseInt(time % 60) : parseInt(time % 60);
+        //总时长
+        var alltime = "" + minute + ":" + second;
+        //分钟
+        var n_minute = parseInt(timenow / 60) < 10 ? "0" + parseInt(timenow / 60) : parseInt(timenow / 60);
+        //秒
+        var n_second = (parseInt(timenow % 60) < 10) ? "0" + parseInt(timenow % 60) : parseInt(timenow % 60);
+        //总时长
+        var n_time = "" + n_minute + ":" + n_second;
+        //console.log(alltime)
+        $time_t.html(alltime);
+        $time_now.html(n_time);
+    }
+
+    m.addEventListener('timeupdate', function () {
+        var progressValue = m.currentTime / m.duration;
+        var mtime = Math.floor(m.duration);
+        var mnow=Math.floor(m.currentTime);
+       // console.log('时长：' + mtime)
+        if (!isNaN(m.duration)) {
+
+            if (progressValue == 1) {
+                progressValue = 0;
+            }
+            //canvas
+            //drawCircle(mc,progressValue);
+            var barValue = Math.floor((m.currentTime / m.duration) * proBarWidth);
+            progressbar('.progress-bar', barValue);
+            slideBarProgress("#slide_btn",barValue);
+            playTime(mtime,mnow);
+        }
+    });
+    m.addEventListener('ended',function () {
+        $(".progress-bar").css('width',0);
+    })
+    function progressbar(ele, percentage) {
+        $(ele).css('width', percentage);
+    }
+    function slideBarProgress(ele,percentage) {
+        $(ele).css('left',percentage);
+    }
+    //canvas画布
+    function drawCircle(canvas, percentage) {
+        var clientWidth = document.documentElement.clientWidth;
+        var canvasWidth = Math.floor(clientWidth * 200 / 750);
+        var innerR = canvasWidth * 0.8 * 0.5;
+        var ctx;
+        canvas.setAttribute('width', canvasWidth + 'px');
+        canvas.setAttribute('height', canvasWidth + 'px');
+        if (canvas.getContext) {
+            ctx = canvas.getContext('2d');
+        }
+        ctx.translate(canvasWidth / 2, canvasWidth / 2);
+        ctx.beginPath();
+        ctx.arc(0, 0, innerR, 0, Math.PI * 2, false);
+        ctx.lineWidth = 10;
+        ctx.strokeStyle = "#F0F0F0";
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.arc(0, 0, innerR, Math.PI * 3 / 2, (Math.PI * 3 / 2 + Math.PI * 2 / 180 + percentage * Math.PI * 2), false);
+        ctx.lineWidth = 10;
+        ctx.strokeStyle = "#EEBD44";
+        ctx.stroke();
+    }
+    function getEle(id) {
+        return document.getElementById(id);
+    }
+</script>
+</html>
