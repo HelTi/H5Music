@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>my music</title>
-    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no,minimum-scale=1.0,maximum-scale=1.0">
+    <meta name="viewport"
+          content="width=device-width,initial-scale=1,user-scalable=no,minimum-scale=1.0,maximum-scale=1.0">
     <link href="static/css/font-awesome.min.css" rel="stylesheet">
     <link href="static/css/index.css" rel="stylesheet">
 </head>
@@ -23,7 +24,8 @@
         </div>
     </div>
     <div class="music-p" style="position:absolute;bottom:25%; font-size:13px;padding: 10px;">
-        <p id="showP" class="animationP" style="text-indent: 2em;">这个世界上肯定有另一个我，做着我不敢做的事，过着我想过的生活。一个人逛街，一个人吃饭，一个人旅行，一个人做很多事。极致的幸福，存在于孤独的深海。在这样日复一日的生活里，我逐渐和自己达成和解。</p>
+        <p id="showP" class="animationP" style="text-indent: 2em;">
+            这个世界上肯定有另一个我，做着我不敢做的事，过着我想过的生活。一个人逛街，一个人吃饭，一个人旅行，一个人做很多事。极致的幸福，存在于孤独的深海。在这样日复一日的生活里，我逐渐和自己达成和解。</p>
     </div>
     <div class="play-control">
         <audio id="music" src="media/蔡健雅 - 红色高跟鞋.mp3" autoplay="autoplay"></audio>
@@ -37,7 +39,12 @@
             <div id="slide_btn"></div>
         </div>
         <div class="mtime" id="mtime">
-            <p><span class="autho">红色高跟鞋-蔡雅健</span><span class="m_time_now">00:00</span>/<span class="time_t">00:00</span></p>
+            <p>
+                <span class="autho">红色高跟鞋-蔡雅健</span>
+            <div id="time">
+                <span class="m_time_now">00:00</span>/<span class="time_t">00:00</span>
+            </div>
+            </p>
         </div>
     </div>
 </div>
@@ -66,24 +73,24 @@
             }
         ]
     }
-    var mPlayer=new musicPlayer({
-        domId:'music',
-        nexdom:'#m-next',
-        predom:'#m-pre',
-        toogledom:'#m-play'
-    },datamusic)
+    var mPlayer = new musicPlayer({
+        domId: 'music',
+        nexdom: '#m-next',
+        predom: '#m-pre',
+        toogledom: '#m-play'
+    }, datamusic)
     mPlayer.init();
 
-    var datap=[
-        {'content':'这个世界上肯定有另一个我，做着我不敢做的事，过着我想过的生活。一个人逛街，一个人吃饭，一个人旅行，一个人做很多事。极致的幸福，存在于孤独的深海。在这样日复一日的生活里，我逐渐和自己达成和解。'},
-        {'content':'从小觉得最厉害的人就是妈妈，不怕黑，什么都知道，做好吃的饭，把生活打理得井井有条，哭着不知道怎么办时只好找她。可我好像忘了这个被我依靠的人也曾是个小姑娘，怕黑也掉眼泪，笨手笨脚会被针扎到手。最美的姑娘，是什么让你变得这么强大呢，是岁月，还是爱。——德卡先生'}
+    var datap = [
+        {'content': '这个世界上肯定有另一个我，做着我不敢做的事，过着我想过的生活。一个人逛街，一个人吃饭，一个人旅行，一个人做很多事。极致的幸福，存在于孤独的深海。在这样日复一日的生活里，我逐渐和自己达成和解。'},
+        {'content': '从小觉得最厉害的人就是妈妈，不怕黑，什么都知道，做好吃的饭，把生活打理得井井有条，哭着不知道怎么办时只好找她。可我好像忘了这个被我依靠的人也曾是个小姑娘，怕黑也掉眼泪，笨手笨脚会被针扎到手。最美的姑娘，是什么让你变得这么强大呢，是岁月，还是爱。——德卡先生'}
     ]
-    var len =datap.length;
-    var now=0;
+    var len = datap.length;
+    var now = 0;
     setInterval(function () {
         $("#showP").html(datap[now].content);
         $("#showP").removeClass('animationP').addClass('animationP')
-        now=(now +1)%len;
-    },5000)
+        now = (now + 1) % len;
+    }, 5000)
 </script>
 </html>

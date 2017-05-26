@@ -37,7 +37,7 @@
             <div id="slide_btn"></div>
         </div>
         <div class="mtime" id="mtime">
-            <p><span class="autho">红色高跟鞋-蔡雅健</span><span class="m_time_now">00:00</span>/<span class="time_t">00:00</span></p>
+            <p><span class="autho">红色高跟鞋-蔡雅健</span><div id="time"><span class="m_time_now">00:00</span>/<span class="time_t">00:00</span></div></p>
         </div>
     </div>
 </div>
@@ -145,7 +145,7 @@
             }
             //canvas
             //drawCircle(mc,progressValue);
-            var barValue = Math.floor((m.currentTime / m.duration) * proBarWidth);
+            var barValue = ((m.currentTime / m.duration) * proBarWidth);
             progressbar('.progress-bar', barValue);
             slideBarProgress("#slide_btn",barValue);
             playTime(mtime,mnow);

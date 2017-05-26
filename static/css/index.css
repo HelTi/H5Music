@@ -1,12 +1,11 @@
 body, html {
     height: 100%;
-    width: 100%;
+
     overflow: hidden;
     -webkit-text-size-adjust: 100%;
     margin: 0;
     padding: 0;
 }
-
 * {
     margin: 0;
     padding: 0;
@@ -28,8 +27,10 @@ a {
 
 #app {
     height: 100%;
-    position: absolute;
+   position: relative;
     width: 100%;
+    max-width: 700px;
+    margin:0 auto;
 }
 
 #song-wrap {
@@ -146,10 +147,11 @@ a {
     height: 212px;
     margin: -106px 0 0 -106px;
     border-radius: 50%;
+}
+.songimgRotate{
     animation: circling 20s infinite linear;
     -webkit-animation: circling 20s infinite linear;
 }
-
 .m-song-img, .m-song-plybtn {
     position: absolute;
     left: 50%;
@@ -163,7 +165,7 @@ a {
 }
 
 #showP {
-    color: #ffffff;
+    color: #e6e9ea;
 }
 
 .animationP {
@@ -288,13 +290,22 @@ a {
 .progress .progress-bar {
     background-color: #535353;
 }
-
+.mtime{
+    padding: 5px;
+}
 .mtime p {
     color: #ffffff;
-    text-align: right;
     padding-right: 10px;
 }
-
+#time{
+    display: block;
+    float: right;
+    padding-right: 5px;
+    color: #ffffff;
+}
+#time span{
+    color: #ffffff;
+}
 .autho {
     color: rgba(225, 225, 225, .8);
     font-size: 14px;
